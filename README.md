@@ -1,3 +1,4 @@
+<img width="1910" height="996" alt="image" src="https://github.com/user-attachments/assets/7a353ab7-e248-4721-a82d-6f41c17fce49" />
 # RAG Document Q&A Chatbot
 
 A Retrieval-Augmented Generation (RAG) chatbot that answers questions about PDF documents using semantic search, vector embeddings, ChromaDB, and the Gemini API.
