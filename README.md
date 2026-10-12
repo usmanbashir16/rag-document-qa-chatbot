@@ -1,5 +1,6 @@
 <img width="1910" height="996" alt="image" src="https://github.com/user-attachments/assets/7a353ab7-e248-4721-a82d-6f41c17fce49" />
-**RAG Document Q&A Chatbot with Vector Database**
+
+# RAG Document Q&A Chatbot with Vector Database
 
 An AI-powered document question-answering application that allows users to ask questions about PDF documents and receive context-aware answers using Retrieval-Augmented Generation (RAG).
 
@@ -184,6 +185,11 @@ The response contains an answer and relevant source information. The exact respo
 **Muhammad Usman**
 
 GitHub: https://github.com/usmanbashir16
+
+---
+
+*Built as a practical project to explore Retrieval-Augmented Generation, semantic search, vector databases, LLM integration, and full-stack AI application development.*
+
 
 ---
 
