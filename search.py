@@ -1,40 +1,46 @@
 
-from pathlib import Path
-
-from read_pdf import extract_text_from_pdf
-from chunk_text import chunk_text
+from vector_store import search_similar
 
 
-def process_pdf(pdf_path: str) -> list[str]:
-    """Extract text from a PDF and split it into chunks."""
+def main() -> None:
+    print("RFP Document Search")
+    print("Type 'exit' to quit.\n")
 
-    text = extract_text_from_pdf(pdf_path)
+    while True:
+        question = input("Ask a question about your RFP: ").strip()
 
-    chunks = chunk_text(
-        text,
-        chunk_size=500,
-        overlap=50
-    )
+        if question.lower() in {"exit", "quit"}:
+            print("Goodbye!")
+            break
 
-    return chunks
+        if not question:
+            print("Please enter a question.")
+            continue
+
+        try:
+            results = search_similar(question, n_results=3)
+
+            if not results:
+                print("No results found. Ingest a PDF first.")
+                continue
+
+            print("\nRelevant information:\n")
+
+            for index, result in enumerate(results, start=1):
+                source = result["metadata"]["source"]
+                chunk_index = result["metadata"]["chunk_index"]
+                distance = result["distance"]
+
+                print(f"--- Result {index} ---")
+                print(f"Source: {source}")
+                print(f"Chunk: {chunk_index}")
+                print(f"Distance: {distance:.4f}")
+                print(result["text"])
+                print()
+
+        except Exception as error:
+            print(f"Search error: {error}")
 
 
 if __name__ == "__main__":
-    pdf_path = input("Enter the PDF file path: ").strip().strip('"')
-
-    try:
-        chunks = process_pdf(pdf_path)
-
-        print("\nPDF processed successfully!")
-        print(f"Total chunks: {len(chunks)}")
-
-        for index, chunk in enumerate(chunks, start=1):
-            print(f"\n--- Chunk {index} ---")
-            print(chunk[:300])
-            print("...")
-
-    except FileNotFoundError:
-        print("Error: PDF file not found. Check the file path.")
-
-    except Exception as error:
-        print(f"Error processing PDF: {error}")
+    main()
