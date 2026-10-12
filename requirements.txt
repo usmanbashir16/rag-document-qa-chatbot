@@ -6,3 +6,4 @@ chromadb
 google-genai
 python-dotenv
 pypdf
+python -m pip install fastapi "uvicorn[standard]"

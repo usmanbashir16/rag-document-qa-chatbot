@@ -10,6 +10,7 @@ ai-env/
 
 # Environment variables and API keys
 .env
+!.env.example
 
 # Vector database
 chroma_db/
@@ -19,4 +20,8 @@ chroma_db/
 
 # IDE settings
 .vscode/
+
+# Frontend dependencies and build files
+frontend/node_modules/
+frontend/dist/
 ```
