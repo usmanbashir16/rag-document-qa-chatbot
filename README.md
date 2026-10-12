@@ -1,188 +1,191 @@
 <img width="1910" height="996" alt="image" src="https://github.com/user-attachments/assets/7a353ab7-e248-4721-a82d-6f41c17fce49" />
-# RAG Document Q&A Chatbot
+# RAG Document Q&A Chatbot with Vector Database
 
-A Retrieval-Augmented Generation (RAG) chatbot that answers questions about PDF documents using semantic search, vector embeddings, ChromaDB, and the Gemini API.
+An AI-powered document question-answering application that allows users to ask questions about PDF documents and receive context-aware answers using Retrieval-Augmented Generation (RAG).
 
-The project extracts text from PDF documents, splits it into smaller chunks, converts the chunks into numerical embeddings, and stores them in a persistent vector database. When a user asks a question, the system retrieves relevant document sections and uses Gemini to generate an answer based on the retrieved context.
+The project combines a React frontend, FastAPI backend, semantic search, ChromaDB vector storage, and Google's Gemini API to retrieve relevant document content and generate answers based on the available context.
 
 ## Features
 
-* PDF text extraction using PyPDF
-* Text chunking with overlapping sections
-* Text embeddings using Sentence Transformers
-* Persistent vector storage with ChromaDB
-* Semantic search for relevant document sections
-* Gemini-powered question answering
-* Support for ingesting multiple PDF documents into one collection
+* **PDF-Based Question Answering:** Ask natural-language questions about indexed PDF documents.
+* **Retrieval-Augmented Generation (RAG):** Retrieves relevant document chunks before generating an answer.
+* **Semantic Search:** Uses sentence embeddings to identify content related to a question.
+* **Vector Database:** Stores and searches document embeddings using ChromaDB.
+* **AI-Generated Responses:** Uses Google's Gemini API to generate context-aware answers.
+* **Source References:** Returns relevant document chunks to help users understand where answers came from.
+* **Interactive Web Interface:** React-based chatbot interface for submitting questions and viewing responses.
+* **REST API:** FastAPI endpoints connect the frontend with the RAG pipeline.
 
-## Tech Stack
+## Technology Stack
 
-* Python
-* PyPDF
-* Sentence Transformers
-* ChromaDB
-* Google Gemini API
-* python-dotenv
+| Component       | Technology                                 |
+| --------------- | ------------------------------------------ |
+| Frontend        | React.js, Vite, JavaScript, CSS            |
+| Backend         | Python, FastAPI                            |
+| Vector Database | ChromaDB                                   |
+| Embedding Model | Sentence Transformers — `all-MiniLM-L6-v2` |
+| Generative AI   | Google Gemini API                          |
+| API Server      | Uvicorn                                    |
+| Version Control | Git and GitHub                             |
+
+## How It Works
+
+1. **Document Processing:** PDF documents are extracted and divided into smaller text chunks.
+2. **Embedding Generation:** A sentence-transformer model converts text chunks into numerical vector embeddings.
+3. **Vector Storage:** ChromaDB stores the embeddings and associated document text.
+4. **Question Submission:** The user enters a question through the React interface.
+5. **Semantic Retrieval:** The backend searches the vector database for relevant document chunks.
+6. **Answer Generation:** Retrieved context is sent to the Gemini API to generate a relevant response.
+7. **Source Display:** The application returns the answer along with relevant source information.
 
 ## Project Structure
 
 ```text
 rag-document-qa-VectorDB/
-├── read_pdf.py
-├── chunk_text.py
-├── embeddings.py
-├── vector_store.py
-├── ingest.py
-├── search.py
-├── chat.py
-├── requirements.txt
-├── .env
+├── backend/
+│   └── api.py
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── App.jsx
+│   │   ├── App.css
+│   │   ├── index.css
+│   │   └── main.jsx
+│   ├── package.json
+│   └── vite.config.js
+├── chroma_db/             # Local vector database (not committed)
+├── .env                   # API keys (not committed)
 ├── .gitignore
+├── requirements.txt
 └── README.md
 ```
 
-The `chroma_db/` directory is created locally when the vector database is initialized. It is excluded from Git tracking.
+Additional PDF-processing and vector-store Python files may exist in the project root.
 
-## Setup Instructions
+## Prerequisites
+
+Install the following before running the project:
+
+* Python 3.12 or a compatible version
+* Node.js and npm
+* Git
+* A Google Gemini API key
+
+## Installation and Setup
 
 ### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/usmanbashir16/rag-document-qa-chatbot.git
-cd rag-document-qa-chatbot
+cd rag-document-qa-VectorDB
 ```
 
-### 2. Create and Activate a Virtual Environment
+### 2. Set Up the Python Environment
 
-```bash
-python -m venv ai-env
-```
-
-On Windows PowerShell:
+Create and activate a virtual environment:
 
 ```powershell
-.\ai-env\Scripts\Activate.ps1
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 ```
 
-### 3. Install Dependencies
+Install the Python dependencies:
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
 
-### 4. Configure the Gemini API Key
+### 3. Configure Environment Variables
 
-Create a `.env` file in the project root directory and add your Gemini API key:
+Create a `.env` file in the project root:
 
-```dotenv
+```env
 GEMINI_API_KEY=your_gemini_api_key
+GEMINI_MODEL=gemini-3.5-flash-lite
 ```
 
-Replace the placeholder with your own API key. Never commit your `.env` file or expose your API key publicly.
+Replace the placeholder with your actual Gemini API key. Use a model name supported by your Gemini API account.
 
-## How to Use
+**Security:** Never commit your `.env` file or expose your API key in frontend code.
 
-### Step 1: Add a PDF
+### 4. Prepare the Vector Database
 
-Place your PDF document in the project directory or keep it at another accessible location.
+Process and index your PDF documents using the project's existing PDF-processing and vector-store workflow. Ensure the ChromaDB collection is populated before asking document-specific questions.
 
-### Step 2: Ingest the PDF
+The local `chroma_db/` directory is generated data and is not included in the Git repository.
 
-Run:
+### 5. Start the Backend
+
+From the project root, activate your Python environment and run:
 
 ```bash
-python ingest.py
+python -m uvicorn backend.api:app --reload
 ```
 
-Enter the PDF's full path when prompted.
+The backend should be available at:
 
-The ingestion pipeline automatically:
+* API server: http://127.0.0.1:8000
+* Interactive API documentation: http://127.0.0.1:8000/docs
+* Health check: http://127.0.0.1:8000/health
 
-1. Extracts text from the PDF.
-2. Splits the text into chunks.
-3. Generates embeddings for the chunks.
-4. Stores the chunks, embeddings, and source metadata in ChromaDB.
+### 6. Start the Frontend
 
-### Step 3: Ask Questions
+Open a second terminal:
 
-Run:
-
-```bash
-python chat.py
+```powershell
+cd frontend
+npm install
+npm run dev
 ```
 
-Enter questions related to the ingested documents. The chatbot retrieves relevant text chunks and uses Gemini to generate answers.
+Open the local URL printed by Vite, normally:
 
-Type `exit` to quit the chatbot.
+http://localhost:5173
 
-### Optional: Search Without Gemini
+Keep both the frontend and backend servers running while using the chatbot.
 
-To inspect retrieved text chunks without generating a Gemini answer, run:
+## API Endpoints
 
-```bash
-python search.py
+| Method | Endpoint    | Purpose                                                            |
+| ------ | ----------- | ------------------------------------------------------------------ |
+| GET    | `/health`   | Checks backend health                                              |
+| POST   | `/api/chat` | Accepts a question and returns an AI-generated answer with sources |
+| GET    | `/docs`     | Opens the interactive FastAPI documentation                        |
+
+### Example Chat Request
+
+```json
+{
+  "question": "What does the document say about the main topic?"
+}
 ```
 
-## How the RAG Pipeline Works
+The response contains an answer and relevant source information. The exact response structure depends on the backend implementation.
 
-```text
-PDF Document
-     |
-     v
-Text Extraction
-     |
-     v
-Text Chunking
-     |
-     v
-Embedding Generation
-     |
-     v
-ChromaDB Vector Storage
-     |
-     v
-User Question
-     |
-     v
-Semantic Retrieval
-     |
-     v
-Relevant Document Context
-     |
-     v
-Gemini API
-     |
-     v
-Generated Answer
-```
+## Security and Privacy
 
-## Configuration
-
-* **Chunk size:** 500 words
-* **Chunk overlap:** 50 words
-* **Embedding model:** `sentence-transformers/all-MiniLM-L6-v2`
-* **Vector database:** ChromaDB
-* **Generative model:** Configured in `chat.py`
-
-These settings can be adjusted according to document length, retrieval quality, and model availability.
-
-## Important Notes
-
-* The vector database is stored locally in `chroma_db/`.
-* Previously ingested documents remain available in the persistent collection unless the database is removed or modified.
-* Multiple PDFs currently share the same collection, so retrieved results may come from different documents.
-* Scanned PDFs may require OCR because ordinary PDF text extraction may not read text embedded in images.
-* Generated answers depend on the retrieved document context and should be verified against the original document for critical requirements, deadlines, and compliance information.
-* Do not commit API keys, confidential documents, or private database files to GitHub.
+* Store API keys in environment variables.
+* Keep `.env`, private PDFs, virtual environments, and local vector database files out of GitHub.
+* Avoid uploading confidential or sensitive documents to external AI services without authorization.
+* Review document content and API data-handling requirements before using the application with business or customer information.
 
 ## Future Improvements
 
-* PDF page-number citations
-* Improved handling of tables, headings, and document structure
-* Source filtering for individual documents
-* A web-based chatbot interface
-* Better retrieval evaluation and testing
+* Support multiple documents and document collections.
+* Add document upload and indexing through the web interface.
+* Improve source citations and retrieval accuracy.
+* Add conversation history and session management.
+* Introduce authentication and user-level access control.
+* Deploy the frontend and backend for remote access.
 
-## License
+## Author
 
-Add a license if you intend to distribute this project publicly.
+**Muhammad Usman**
+
+GitHub: https://github.com/usmanbashir16
+
+---
+
+*Built as a practical project to explore Retrieval-Augmented Generation, semantic search, vector databases, LLM integration, and full-stack AI application development.*
+
