@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+ai-env/
+
+# Environment variables and API keys
+.env
+
+# Vector database
+chroma_db/
+
+# IDE
+.vscode/

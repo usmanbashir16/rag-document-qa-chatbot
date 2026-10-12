@@ -1,0 +1,8 @@
+torch
+numpy
+transformers
+sentence-transformers
+chromadb
+google-genai
+python-dotenv
+pypdf
