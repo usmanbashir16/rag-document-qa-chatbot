@@ -1,6 +1,9 @@
-# Python
+```gitignore
+# Python cache files
 __pycache__/
 *.py[cod]
+
+# Virtual environments
 .venv/
 venv/
 ai-env/
@@ -11,5 +14,9 @@ ai-env/
 # Vector database
 chroma_db/
 
-# IDE
+# PDF documents (RFPs and other private files)
+*.pdf
+
+# IDE settings
 .vscode/
+```
